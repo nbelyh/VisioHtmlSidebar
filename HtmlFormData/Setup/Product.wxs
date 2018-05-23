@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Wix Project template to install Visio components -->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
+
+	<?define Version="1.0.1.0"?>
+	<?define ProductCode = "{128CC67E-F9D1-4222-BB2E-A1F63606CAFC}" ?>
+	<?define UpgradeCode = "{b9cf0a85-a251-4749-b423-b8dbfcf230c9}" ?>
+
+	<Product Id="$(var.ProductCode)" Name="HtmlFormData" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+
+		<!-- check taht .NET 4 (client profile at least) is installed -->
+		<PropertyRef Id="NETFRAMEWORK40CLIENT" />
+		<PropertyRef Id="NETFRAMEWORK40FULL" />
+		<PropertyRef Id="NETFRAMEWORK45" />
+
+		<Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
+			<![CDATA[Installed OR NETFRAMEWORK40CLIENT OR NETFRAMEWORK40 OR NETFRAMEWORK45]]>
+		</Condition>
+
+		<!-- Visio 2007 VSTO addin support - remove this block if Visio 2007 support is not required -->
+		<Property Id="VISIO2007">
+			<RegistrySearch Id="Visio2007_Installed" Root="HKLM" Key="Software\Microsoft\Office\12.0\Visio\InstallRoot" Name="Path" Type="raw" />
+		</Property>
+
+		<Property Id="VISIO2007SP3">
+			<DirectorySearch Id="Visio2007_Version" Path="[VISIO2007]">
+				<FileSearch Id="Visio2007_VisLib" Name="VisLib.dll" MinVersion="12.0.6606"></FileSearch>
+			</DirectorySearch>
+		</Property>
+
+		<Property Id="VISIO2010">
+			<RegistrySearch Id="Visio2010_Installed" Root="HKLM" Key="Software\Microsoft\Office\14.0\Visio\InstallRoot" Name="Path" Type="raw" />
+		</Property>
+
+		<Property Id="VISIO2010SP1">
+			<DirectorySearch Id="Visio2010_Version" Path="[VISIO2010]">
+				<FileSearch Id="Visio2010_VisLib" Name="VisLib.dll" MinVersion="14.0.6022"></FileSearch>
+			</DirectorySearch>
+		</Property>
+
+		<Property Id="VSTOR40">
+			<RegistrySearch Id="VSTOR_Installed" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="VSTORFeature_CLR40" Type="raw" />
+		</Property>
+
+		<Condition Message="This addin requires the VSTO 4.0 Runtime to run on Visio 2007. Please install the VSTO runtime then run this installer again.">
+			<![CDATA[Installed OR (VSTOR40 OR NOT VISIO2007)]]>
+		</Condition>
+
+		<Condition Message="This addin requires Visio Service Pack 3 to be installed to run on Visio 2007. Please install the Visio 2007 Service Pack 3 then run this installer again.">
+			<![CDATA[Installed OR (VISIO2007SP3 OR NOT VISIO2007)]]>
+		</Condition>
+
+		<Condition Message="This addin requires Visio Service Pack 2 to be installed to run on Visio 2010. Please install the Visio 2010 Service Pack 2 then run this installer again.">
+			<![CDATA[Installed OR (VISIO2010SP1 OR NOT VISIO2010)]]>
+		</Condition>
+		<!-- Visio 2007 support -->
+		<!-- override default license -->
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+		<!-- allow major upgrades -->
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<!-- allow fast installation -->
+		<Property Id="MSIFASTINSTALL" Value="7" />
+
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="Setup" Level="1">
+			<ComponentGroupRef Id="AddinFiles"/>
+			<ComponentGroupRef Id="Resources"/>
+			<ComponentGroupRef Id="Resources_edit_files"/>
+		</Feature>
+
+		<!-- UI settings -->
+		<UI>
+
+			<UIRef Id="WixUI_Advanced"/>
+			<Property Id="ALLUSERS" Value="2" />
+			<Property Id="ApplicationFolderName" Value="HtmlFormData" />
+			<Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+
+			<Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" >WixAppFolder = "WixPerUserFolder"</Publish>
+			<Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="{}" >WixAppFolder = "WixPerMachineFolder"</Publish>
+		</UI>
+
+	</Product>
+
+	<!-- Define default directory structure -->
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="APPLICATIONFOLDER" Name="HtmlFormData">
+					<Directory Id="Resources" Name="Resources">
+						<Directory Id="Resources_edit_files" Name="edit_files"></Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<ComponentGroup Id="Resources" Source="$(var.HtmlFormData.TargetDir)\Resources" Directory="Resources">
+			<Component>
+				<File Name="edit.html"></File>
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="Resources_edit_files" Source="$(var.HtmlFormData.TargetDir)\Resources\edit_files" Directory="Resources_edit_files">
+			<Component>
+				<File Name="quill.min.js"></File>
+			</Component>
+			<Component>
+				<File Name="quill.snow.css"></File>
+			</Component>
+		</ComponentGroup>
+
+		<!-- Addin files to be included in setup -->
+		<ComponentGroup Id="AddinFiles" Directory="APPLICATIONFOLDER">
+
+			<!-- Add the addin dll to the setup. Reference using project referencing -->
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetPath)" ></File>
+			</Component>
+
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetPath).config" ></File>
+			</Component>
+
+			<!-- VSTO framework file -->
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
+			</Component>
+
+			<!-- Add the addin manifest file -->
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetPath).manifest"></File>
+			</Component>
+
+			<!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetDir)$(var.HtmlFormData.TargetName).vsto">
+					<visio:PublishAddin />
+				</File>
+			</Component>
+
+			<!-- Visio 2007 VSTO addin support - remove this block if Visio 2007 support is not required -->
+			<Component Id="EnableLocalMachineVSTO" Permanent="yes">
+				<Condition><![CDATA[VISIO2007 AND ALLUSERS=1]]></Condition>
+				<RegistryKey Root="HKLM" Key="Software\Microsoft\Office\12.0\Common\General">
+					<RegistryValue Name="EnableLocalMachineVSTO" Value="1" Type="integer" KeyPath="yes" />
+				</RegistryKey>
+			</Component>
+			<!-- Visio 2007 support -->
+
+		</ComponentGroup>
+
+	</Fragment>
+</Wix>

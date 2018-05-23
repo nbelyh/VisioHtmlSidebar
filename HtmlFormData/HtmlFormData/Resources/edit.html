@@ -1,0 +1,28 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=11" > 
+<script src="edit_files/quill.min.js" ></script>
+<link rel="stylesheet" href="edit_files/quill.snow.css"></link>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 90vh;
+}
+</style>
+</head>
+<body>
+<div id="editor"></div>
+<script>
+var editor = new Quill('#editor', { theme: 'snow' });
+
+function getText() { return editor.root.innerHTML; }
+
+function disableText() { editor.disable(); editor.setText(''); }
+function setText(text) { editor.enable(); editor.clipboard.dangerouslyPasteHTML(text); }
+
+</script>
+</body>
+</html>
