@@ -74,15 +74,16 @@ namespace HtmlFormData
 
             var newCurrentShape = _window.Selection.PrimaryItem;
             _currentShapeId = newCurrentShape != null ? newCurrentShape.ID : 0;
-            var newTargetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape) : null;
-            if (newTargetCell != null)
+
+            var targetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape) : null;
+            if (targetCell != null)
             {
-                var comment = GetCellText(newTargetCell);
-                document.InvokeScript("setText", new object [] { comment });
+                var html = GetCellText(targetCell);
+                document.InvokeScript("setEditorHtml", new object [] { html });
             }
             else
             {
-                document.InvokeScript("disableText");
+                document.InvokeScript("disableEditor");
             }
         }
 
@@ -103,13 +104,22 @@ namespace HtmlFormData
                 var currentShape = _window.PageAsObj.Shapes.ItemFromID[_currentShapeId];
                 if (currentShape != null)
                 {
-                    var oldTargetCell = GetTargetCell(currentShape);
-                    if (oldTargetCell != null)
+                    var targetCell = GetTargetCell(currentShape);
+                    if (targetCell != null)
                     {
-                        var newText = document.InvokeScript("getText").ToString();
-                        var oldText = GetCellText(oldTargetCell);
+                        var newText = document.InvokeScript("getEditorHtml").ToString();
+                        var oldText = GetCellText(targetCell);
                         if (newText != oldText)
-                            SetCellText(oldTargetCell, newText);
+                            SetCellText(targetCell, newText);
+                    }
+
+                    var targetPlainTextCell = GetTargetPlainTextCell(currentShape);
+                    if (targetPlainTextCell != null)
+                    {
+                        var newText = document.InvokeScript("getEditorText").ToString().Replace("\r\n\r\n", "\r\n");
+                        var oldText = GetCellText(targetPlainTextCell);
+                        if (newText != oldText)
+                            SetCellText(targetPlainTextCell, newText);
                     }
                 }
             }
@@ -120,7 +130,12 @@ namespace HtmlFormData
         private Visio.Cell GetTargetCell(Visio.Shape shape)
         {
             var propName = Settings.Default.PropertyName;
-            return shape.CellExistsU[propName, 0] != 0 ? shape.CellsU[propName] : null;
+            return !string.IsNullOrEmpty(propName) && shape.CellExistsU[propName, 0] != 0 ? shape.CellsU[propName] : null;
+        }
+        private Visio.Cell GetTargetPlainTextCell(Visio.Shape shape)
+        {
+            var propNamePlainText = Settings.Default.PropertyNamePlainText;
+            return !string.IsNullOrEmpty(propNamePlainText) && shape.CellExistsU[propNamePlainText, 0] != 0 ? shape.CellsU[propNamePlainText] : null;
         }
 
         private void SetCellText(Visio.Cell cell, string text)

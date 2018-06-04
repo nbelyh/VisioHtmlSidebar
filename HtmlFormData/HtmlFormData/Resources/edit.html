@@ -16,17 +16,28 @@ html, body {
 <body>
 <div id="editor"></div>
 <script>
-var editor = new Quill('#editor',
-    {
-      theme: 'snow', modules: { clipboard: { matchVisual: false } }
-    });
+var editor = new Quill('#editor', {
+  theme: 'snow', 
+  modules: { clipboard: { matchVisual: false } }
+});
 
-function getText() {
+function getEditorText() {
+	return editor.root.innerText;
+}
+
+function getEditorHtml() {
     return editor.root.innerHTML.replace(/<p><br><\/p>$/, "");
 }
 
-function disableText() { editor.disable(); editor.setText(''); }
-function setText(text) { editor.enable(); editor.clipboard.dangerouslyPasteHTML(text); }
+function disableEditor() { 
+	editor.disable();
+	editor.setText(''); 
+}
+
+function setEditorHtml(text) { 
+	editor.enable();
+	editor.clipboard.dangerouslyPasteHTML(text); 
+}
 
 </script>
 </body>

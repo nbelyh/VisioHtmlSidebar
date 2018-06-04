@@ -34,5 +34,17 @@ namespace HtmlFormData.Properties {
                 this["PropertyName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PropertyNamePlainText {
+            get {
+                return ((string)(this["PropertyNamePlainText"]));
+            }
+            set {
+                this["PropertyNamePlainText"] = value;
+            }
+        }
     }
 }

@@ -32,13 +32,15 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.textBoxPropertyName = new System.Windows.Forms.TextBox();
             this.labelPropertyName = new System.Windows.Forms.Label();
+            this.labelPropertyNamePlainText = new System.Windows.Forms.Label();
+            this.textBoxPropertyNamePlainText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(86, 82);
+            this.buttonOK.Location = new System.Drawing.Point(86, 141);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -50,7 +52,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(174, 82);
+            this.buttonCancel.Location = new System.Drawing.Point(174, 141);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -61,7 +63,7 @@
             // 
             this.textBoxPropertyName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPropertyName.Location = new System.Drawing.Point(16, 40);
+            this.textBoxPropertyName.Location = new System.Drawing.Point(19, 32);
             this.textBoxPropertyName.Name = "textBoxPropertyName";
             this.textBoxPropertyName.Size = new System.Drawing.Size(230, 20);
             this.textBoxPropertyName.TabIndex = 2;
@@ -69,11 +71,29 @@
             // labelPropertyName
             // 
             this.labelPropertyName.AutoSize = true;
-            this.labelPropertyName.Location = new System.Drawing.Point(16, 16);
+            this.labelPropertyName.Location = new System.Drawing.Point(16, 12);
             this.labelPropertyName.Name = "labelPropertyName";
-            this.labelPropertyName.Size = new System.Drawing.Size(138, 13);
+            this.labelPropertyName.Size = new System.Drawing.Size(184, 13);
             this.labelPropertyName.TabIndex = 3;
-            this.labelPropertyName.Text = "Shape data property to edit:";
+            this.labelPropertyName.Text = "Shape data property to edit (rich text):";
+            // 
+            // labelPropertyNamePlainText
+            // 
+            this.labelPropertyNamePlainText.AutoSize = true;
+            this.labelPropertyNamePlainText.Location = new System.Drawing.Point(16, 64);
+            this.labelPropertyNamePlainText.Name = "labelPropertyNamePlainText";
+            this.labelPropertyNamePlainText.Size = new System.Drawing.Size(189, 13);
+            this.labelPropertyNamePlainText.TabIndex = 5;
+            this.labelPropertyNamePlainText.Text = "Shape data property to edit (plain text):";
+            // 
+            // textBoxPropertyNamePlainText
+            // 
+            this.textBoxPropertyNamePlainText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPropertyNamePlainText.Location = new System.Drawing.Point(19, 84);
+            this.textBoxPropertyNamePlainText.Name = "textBoxPropertyNamePlainText";
+            this.textBoxPropertyNamePlainText.Size = new System.Drawing.Size(230, 20);
+            this.textBoxPropertyNamePlainText.TabIndex = 4;
             // 
             // SettingsForm
             // 
@@ -81,7 +101,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(259, 116);
+            this.ClientSize = new System.Drawing.Size(259, 175);
+            this.Controls.Add(this.labelPropertyNamePlainText);
+            this.Controls.Add(this.textBoxPropertyNamePlainText);
             this.Controls.Add(this.labelPropertyName);
             this.Controls.Add(this.textBoxPropertyName);
             this.Controls.Add(this.buttonCancel);
@@ -101,5 +123,7 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.TextBox textBoxPropertyName;
         private System.Windows.Forms.Label labelPropertyName;
+        private System.Windows.Forms.Label labelPropertyNamePlainText;
+        private System.Windows.Forms.TextBox textBoxPropertyNamePlainText;
     }
 }
