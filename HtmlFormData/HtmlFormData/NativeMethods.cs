@@ -87,5 +87,21 @@ namespace HtmlFormData
                 [In, MarshalAs(UnmanagedType.Interface)] IOleInPlaceActiveObject pActiveObject,
                 [In, MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
         }
+
+
+        const int FEATURE_DISABLE_NAVIGATION_SOUNDS = 21;
+        const int SET_FEATURE_ON_PROCESS = 0x00000002;
+
+        [DllImport("urlmon.dll")]
+        [PreserveSig]
+        [return: MarshalAs(UnmanagedType.Error)]
+        static extern int CoInternetSetFeatureEnabled(int FeatureEntry,
+            [MarshalAs(UnmanagedType.U4)] int dwFlags,
+            bool fEnable);
+
+        public static void DisableClickSounds(bool disable)
+        {
+            CoInternetSetFeatureEnabled(FEATURE_DISABLE_NAVIGATION_SOUNDS, SET_FEATURE_ON_PROCESS, disable);
+        }
     }
 }

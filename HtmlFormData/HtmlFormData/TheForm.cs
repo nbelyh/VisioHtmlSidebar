@@ -31,6 +31,7 @@ namespace HtmlFormData
             _window = window;
             InitializeComponent();
 
+            NativeMethods.DisableClickSounds(true);
             // webBrowser.ObjectForScripting = this;
             
             webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
@@ -61,12 +62,28 @@ namespace HtmlFormData
         {
             _window.SelectionChanged -= WindowOnSelectionChanged;
             _window.Application.VisioIsIdle -= ApplicationVisioIsIdle;
+            NativeMethods.DisableClickSounds(false);
         }
 
         private void WebBrowserOnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs webBrowserDocumentCompletedEventArgs)
         {
-            _needUpdate = true;
-            
+            var document = webBrowser.Document;
+
+            if (document == null)
+                return;
+
+            var newCurrentShape = _window.Selection.PrimaryItem;
+            _currentShapeId = newCurrentShape != null ? newCurrentShape.ID : 0;
+            var newTargetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape) : null;
+            if (newTargetCell != null)
+            {
+                var comment = GetCellText(newTargetCell);
+                document.InvokeScript("setText", new object [] { comment });
+            }
+            else
+            {
+                document.InvokeScript("disableText");
+            }
         }
 
         private void WindowOnSelectionChanged(Visio.Window window)
@@ -97,18 +114,7 @@ namespace HtmlFormData
                 }
             }
 
-            var newCurrentShape = _window.Selection.PrimaryItem;
-            _currentShapeId = newCurrentShape != null ? newCurrentShape.ID : 0;
-            var newTargetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape) : null;
-            if (newTargetCell != null)
-            {
-                var comment = GetCellText(newTargetCell);
-                document.InvokeScript("setText", new object [] { comment });
-            }
-            else
-            {
-                document.InvokeScript("disableText");
-            }
+            webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
         }
 
         private Visio.Cell GetTargetCell(Visio.Shape shape)

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=11" > 
+<meta http-equiv="X-UA-Compatible" content="IE=edge" > 
 <script src="edit_files/quill.min.js" ></script>
 <link rel="stylesheet" href="edit_files/quill.snow.css"></link>
 <style>
@@ -16,9 +16,14 @@ html, body {
 <body>
 <div id="editor"></div>
 <script>
-var editor = new Quill('#editor', { theme: 'snow' });
+var editor = new Quill('#editor',
+    {
+      theme: 'snow', modules: { clipboard: { matchVisual: false } }
+    });
 
-function getText() { return editor.root.innerHTML; }
+function getText() {
+    return editor.root.innerHTML.replace(/<p><br><\/p>$/, "");
+}
 
 function disableText() { editor.disable(); editor.setText(''); }
 function setText(text) { editor.enable(); editor.clipboard.dangerouslyPasteHTML(text); }
