@@ -4,4 +4,4 @@ sign /n "Nikolay Belykh" /v ^
 /tr http://tsa.startssl.com/rfc3161 /td sha256 ^
 /d "Visio HTML/FormData Edit Addin" ^
 /du "http://unmanagedvisio.com" ^
-"Setup\bin\Debug\*.msi"
+"Setup\bin\Release\*.msi"
