@@ -22,7 +22,7 @@ var editor = new Quill('#editor', {
 });
 
 function getEditorText() {
-	return editor.root.innerText;
+	return editor.root.innerText || '';
 }
 
 function getEditorHtml() {
@@ -34,7 +34,7 @@ function disableEditor() {
 	editor.setText(''); 
 }
 
-function setEditorHtml(text) { 
+function setEditorHtml(text) {
 	editor.enable();
 	editor.clipboard.dangerouslyPasteHTML(text); 
 }

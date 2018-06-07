@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddinCommandBars.cs" />
+    <Compile Include="UndoUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NativeMethods.cs" />

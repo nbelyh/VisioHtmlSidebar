@@ -29,15 +29,13 @@ namespace HtmlFormData
             return result;
         }
 
-        private static readonly Lazy<HashSet<Keys>> ControlShortcutKeys = new Lazy<HashSet<Keys>>(() =>
-            KeysFromString(
+        private static readonly HashSet<Keys> ControlShortcutKeys = KeysFromString(
                 "Tab, Tab+Shift, Tab+Ctrl, Ctrl+Shift+Tab, " +
-                "Escape, PgUp, PgDn, End, Home, Ins, " +
-                "Del, F3, " +
+                "Escape, PgUp, PgDn, End, Home, Ins, Del, F3, " +
                 "Shift+Ins, Shift+Del, Ctrl+Back, Ctrl+Space, Ctrl+End, " +
                 "Ctrl+Home, Ctrl+Ins, Ctrl+Del, Ctrl+A, " +
                 "Ctrl+B, Ctrl+C, Ctrl+E, Ctrl+F, Ctrl+G, Ctrl+H, Ctrl+I, Ctrl+M, Ctrl+N, Ctrl+R, Ctrl+Y, Ctrl+U, " +
-                "Ctrl+V, Ctrl+X, Ctrl+Z, Alt+F"));
+                "Ctrl+V, Ctrl+X, Ctrl+Z, Alt+F");
 
         public bool OnKeystrokeMessageForAddon(Visio.MSGWrap msgWrap)
         {
@@ -51,7 +49,7 @@ namespace HtmlFormData
             if (control == null)
                 return false;
 
-            if (ControlShortcutKeys.Value.Contains(keys))
+            if (ControlShortcutKeys.Contains(keys))
             {
                 var msg = new NativeMethods.MSG
                 {
@@ -62,9 +60,9 @@ namespace HtmlFormData
                 };
 
                 var accel = (NativeMethods.IOleInPlaceActiveObject)control.ActiveXInstance;
-                accel.TranslateAccelerator(ref msg);
+                if (accel.TranslateAccelerator(ref msg) == 0)
+                    NativeMethods.TranslateMessage(ref msg);
 
-                NativeMethods.TranslateMessage(ref msg);
                 NativeMethods.DispatchMessage(ref msg);
                 return true;
             }

@@ -5,8 +5,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
 
-	<?define Version="1.0.1.0"?>
-	<?define ProductCode = "{128CC67E-F9D1-4222-BB2E-A1F63606CAFC}" ?>
+	<?define Version="1.0.4.0"?>
+	<?define ProductCode = "{0DB3FE3D-BB8B-498E-A013-B005E0E9F90D}" ?>
 	<?define UpgradeCode = "{b9cf0a85-a251-4749-b423-b8dbfcf230c9}" ?>
 
 	<Product Id="$(var.ProductCode)" Name="HtmlFormData" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
