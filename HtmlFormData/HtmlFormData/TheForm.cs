@@ -10,6 +10,8 @@ namespace HtmlFormData
 {
     public partial class TheForm : Form
     {
+        private const short VisSectionProp = (short)Visio.VisSectionIndices.visSectionProp;
+
         private int _currentShapeId;
         private string _currentShapeHtml;
 
@@ -84,7 +86,7 @@ namespace HtmlFormData
             var newCurrentShape = _window.Selection.PrimaryItem;
             _currentShapeId = newCurrentShape?.ID ?? 0;
 
-            var targetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape) : null;
+            var targetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape, Settings.Default.PropertyName) : null;
             if (targetCell != null)
             {
                 var html = GetCellText(targetCell);
@@ -115,7 +117,7 @@ namespace HtmlFormData
                 var currentShape = _window.PageAsObj.Shapes.ItemFromID[_currentShapeId];
                 if (currentShape != null)
                 {
-                    var targetCell = GetTargetCell(currentShape);
+                    var targetCell = GetTargetCell(currentShape, Settings.Default.PropertyName);
                     if (targetCell != null)
                     {
                         var newHtml = document.InvokeScript("getEditorHtml").ToString();
@@ -123,7 +125,7 @@ namespace HtmlFormData
                         {
                             SetCellText(targetCell, newHtml);
 
-                            var targetPlainTextCell = GetTargetPlainTextCell(currentShape);
+                            var targetPlainTextCell = GetTargetCell(currentShape, Settings.Default.PropertyNamePlainText);
                             if (targetPlainTextCell != null)
                             {
                                 var newText = document.InvokeScript("getEditorText").ToString().Replace("\r\n\r\n", "\r\n");
@@ -138,21 +140,30 @@ namespace HtmlFormData
 
             ReloadSidebar();
         }
-
+        
         private void ReloadSidebar()
         {
             webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
         }
 
-        private Visio.Cell GetTargetCell(Visio.Shape shape)
+        private Visio.Cell GetTargetCell(Visio.Shape shape, string propName)
         {
-            var propName = Settings.Default.PropertyName;
-            return (string.IsNullOrEmpty(propName) || shape.CellExistsU[propName, 0] == 0) ? null : shape.CellsU[propName];
-        }
-        private Visio.Cell GetTargetPlainTextCell(Visio.Shape shape)
-        {
-            var propNamePlainText = Settings.Default.PropertyNamePlainText;
-            return (string.IsNullOrEmpty(propNamePlainText) || shape.CellExistsU[propNamePlainText, 0] == 0) ? null : shape.CellsU[propNamePlainText];
+            if (string.IsNullOrEmpty(propName))
+                return null;
+
+            if (shape.CellExistsU[propName, 0] != 0)
+                return shape.CellsU[propName];
+
+            if (shape.SectionExists[VisSectionProp, 0] == 0)
+                return null;
+
+            for (short rowIndex = 0; rowIndex < shape.RowCount[VisSectionProp]; ++rowIndex)
+            {
+                if (propName == shape.CellsSRC[VisSectionProp, rowIndex, (short) Visio.VisCellIndices.visCustPropsLabel].ResultStr[-1])
+                    return shape.CellsSRC[VisSectionProp, rowIndex, (short) Visio.VisCellIndices.visCustPropsValue];
+            }
+
+            return null;
         }
 
         private void SetCellText(Visio.Cell cell, string text)
@@ -163,7 +174,7 @@ namespace HtmlFormData
 
         private string GetCellText(Visio.Cell cell)
         {
-            return cell.ResultStrU[0];
+            return cell.ResultStrU[(short)Visio.VisUnitCodes.visUnitsString];
         }
     }
 }

@@ -129,6 +129,8 @@ namespace HtmlFormData
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
+            System.Windows.Forms.Application.EnableVisualStyles();
+
             try
             {
                 Settings.Default.Reload();
