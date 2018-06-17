@@ -8,17 +8,36 @@
 <style>
 html, body {
   margin: 0;
+  border: 0;
   padding: 0;
-  height: 90vh;
+  height: 100%;
+}
+#editor {
+  height: calc(100% - 70pt);
 }
 </style>
 </head>
 <body>
 <div id="editor"></div>
 <script>
+var toolbarOptions = [
+  [{ 'header': [1, 2, 3, false] }],
+  // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  // [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  ['bold', 'italic', 'underline'],        // toggled buttons
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  ['clean'],                               // remove formatting button
+
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'align': [] }]
+];
+
 var editor = new Quill('#editor', {
   theme: 'snow', 
-  modules: { clipboard: { matchVisual: false } }
+  modules: { 
+    toolbar: toolbarOptions,
+    clipboard: { matchVisual: false }
+  }
 });
 
 function getEditorText() {

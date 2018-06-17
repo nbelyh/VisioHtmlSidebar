@@ -140,6 +140,9 @@ namespace HtmlFormData
                 MessageBox.Show($@"Unable to load addin settings {exception.Message}");
             }
 
+            if (Settings.Default.ReplaceDefaultHtmlReport)
+                RunReportHook.Install();
+
             _panelManager = new PanelManager(this);
             var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
             if (version < 14)
@@ -150,6 +153,9 @@ namespace HtmlFormData
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
         {
+            if (Settings.Default.ReplaceDefaultHtmlReport)
+                RunReportHook.Uninstall();
+
             AddinUI.ShutdownCommandBars();
             _panelManager.Dispose();
             Application.SelectionChanged -= Application_SelectionChanged;

@@ -16,6 +16,18 @@ namespace HtmlFormData
         {
             Settings.Default.PropertyName = textBoxPropertyName.Text;
             Settings.Default.PropertyNamePlainText = textBoxPropertyNamePlainText.Text;
+
+            if (checkBoxReplaceHtmlReports.Checked && !Settings.Default.ReplaceDefaultHtmlReport)
+            {
+                RunReportHook.Install();
+                Settings.Default.ReplaceDefaultHtmlReport = true;
+            }
+            else if (!checkBoxReplaceHtmlReports.Checked && Settings.Default.ReplaceDefaultHtmlReport)
+            {
+                RunReportHook.Uninstall();
+                Settings.Default.ReplaceDefaultHtmlReport = false;
+            }
+
             Settings.Default.Save();
         }
     }

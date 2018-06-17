@@ -3,19 +3,17 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using HtmlFormData.Properties;
-using Microsoft.Win32;
 using Visio = Microsoft.Office.Interop.Visio;
 
 namespace HtmlFormData
 {
     public partial class TheForm : Form
     {
-        private const short VisSectionProp = (short)Visio.VisSectionIndices.visSectionProp;
+        private const short VIS_SECTION_PROP = (short)Visio.VisSectionIndices.visSectionProp;
 
-        private int _currentShapeId;
+        private Visio.Shape _editorShape;
         private string _currentShapeHtml;
 
-        private bool _needUpdateShapeDataFromSidebar;
         private readonly Visio.Window _window;
 
         static string GetResourcePath(string fileName)
@@ -34,64 +32,34 @@ namespace HtmlFormData
             _window = window;
             InitializeComponent();
 
-            NativeMethods.DisableClickSounds(true);
-            // webBrowser.ObjectForScripting = this;
-            
-            webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
+            Win32.DisableClickSounds(true);
+
             webBrowser.DocumentCompleted += WebBrowserOnDocumentCompleted;
             _window.SelectionChanged += WindowOnSelectionChanged;
-            _window.Application.VisioIsIdle += ApplicationVisioIsIdle;
 
+            _editorShape = _window.Selection.PrimaryItem;
+            ReloadEditor();
+            
             Closed += OnClosed;
-        }
-
-        private void ApplicationVisioIsIdle(Visio.Application app)
-        {
-            if (_needUpdateShapeDataFromSidebar)
-            {
-                var scopeId = app.BeginUndoScope("Updating shape data");
-                try
-                {
-                    SetSelectedShapeFromSidebar();
-                    app.EndUndoScope(scopeId, true);
-                }
-                catch (Exception err)
-                {
-                    app.EndUndoScope(scopeId, false);
-                    System.Diagnostics.Debug.Write(err.ToString());
-                }
-                _needUpdateShapeDataFromSidebar = false;
-            }
         }
 
         private void OnClosed(object sender, EventArgs eventArgs)
         {
             _window.SelectionChanged -= WindowOnSelectionChanged;
-            _window.Application.VisioIsIdle -= ApplicationVisioIsIdle;
-            NativeMethods.DisableClickSounds(false);
+            Win32.DisableClickSounds(false);
         }
 
-        private void WebBrowserOnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs webBrowserDocumentCompletedEventArgs)
-        {
-            SetSidebarFromSelectedShape();
-        }
-
-        private void SetSidebarFromSelectedShape()
+        private void WebBrowserOnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs args)
         {
             var document = webBrowser.Document;
-
             if (document == null)
                 return;
 
-            var newCurrentShape = _window.Selection.PrimaryItem;
-            _currentShapeId = newCurrentShape?.ID ?? 0;
-
-            var targetCell = newCurrentShape != null ? GetTargetCell(newCurrentShape, Settings.Default.PropertyName) : null;
+            var targetCell = GetTargetCell(_editorShape, Settings.Default.PropertyName);
             if (targetCell != null)
             {
-                var html = GetCellText(targetCell);
-                _currentShapeHtml = html;
-                document.InvokeScript("setEditorHtml", new object[] {html});
+                _currentShapeHtml = GetCellText(targetCell);
+                document.InvokeScript("setEditorHtml", new object[] {_currentShapeHtml});
             }
             else
             {
@@ -102,65 +70,64 @@ namespace HtmlFormData
 
         private void WindowOnSelectionChanged(Visio.Window window)
         {
-            _needUpdateShapeDataFromSidebar = true;
+            SaveEditorToShape();
+
+            _editorShape = _window.Selection.PrimaryItem;
+            ReloadEditor();
         }
 
-        void SetSelectedShapeFromSidebar()
+        void SaveEditorToShape()
         {
-            var document = webBrowser.Document;
+            if (_editorShape == null)
+                return;
 
+            var targetCell = GetTargetCell(_editorShape, Settings.Default.PropertyName);
+            if (targetCell == null)
+                return;
+
+            var document = webBrowser.Document;
             if (document == null)
                 return;
 
-            if (_currentShapeId != 0)
+            var newHtml = document.InvokeScript("getEditorHtml").ToString();
+            if (newHtml != _currentShapeHtml)
             {
-                var currentShape = _window.PageAsObj.Shapes.ItemFromID[_currentShapeId];
-                if (currentShape != null)
+                SetCellText(targetCell, newHtml);
+
+                var targetPlainTextCell = GetTargetCell(_editorShape, Settings.Default.PropertyNamePlainText);
+                if (targetPlainTextCell != null)
                 {
-                    var targetCell = GetTargetCell(currentShape, Settings.Default.PropertyName);
-                    if (targetCell != null)
-                    {
-                        var newHtml = document.InvokeScript("getEditorHtml").ToString();
-                        if (newHtml != _currentShapeHtml)
-                        {
-                            SetCellText(targetCell, newHtml);
-
-                            var targetPlainTextCell = GetTargetCell(currentShape, Settings.Default.PropertyNamePlainText);
-                            if (targetPlainTextCell != null)
-                            {
-                                var newText = document.InvokeScript("getEditorText").ToString().Replace("\r\n\r\n", "\r\n");
-                                SetCellText(targetPlainTextCell, newText);
-                            }
-
-                            _window.Application.AddUndoUnit(new UndoUnit(ReloadSidebar, ReloadSidebar));
-                        }
-                    }
+                    var newText = document.InvokeScript("getEditorText").ToString().Replace("\r\n\r\n", "\r\n");
+                    SetCellText(targetPlainTextCell, newText);
                 }
-            }
 
-            ReloadSidebar();
+                _window.Application.AddUndoUnit(new UndoUnit(ReloadEditor, ReloadEditor));
+            }
         }
-        
-        private void ReloadSidebar()
+
+        private void ReloadEditor()
         {
             webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
         }
 
         private Visio.Cell GetTargetCell(Visio.Shape shape, string propName)
         {
+            if (shape == null)
+                return null;
+
             if (string.IsNullOrEmpty(propName))
                 return null;
 
             if (shape.CellExistsU[propName, 0] != 0)
                 return shape.CellsU[propName];
 
-            if (shape.SectionExists[VisSectionProp, 0] == 0)
+            if (shape.SectionExists[VIS_SECTION_PROP, 0] == 0)
                 return null;
 
-            for (short rowIndex = 0; rowIndex < shape.RowCount[VisSectionProp]; ++rowIndex)
+            for (short rowIndex = 0; rowIndex < shape.RowCount[VIS_SECTION_PROP]; ++rowIndex)
             {
-                if (propName == shape.CellsSRC[VisSectionProp, rowIndex, (short) Visio.VisCellIndices.visCustPropsLabel].ResultStr[-1])
-                    return shape.CellsSRC[VisSectionProp, rowIndex, (short) Visio.VisCellIndices.visCustPropsValue];
+                if (propName == shape.CellsSRC[VIS_SECTION_PROP, rowIndex, (short) Visio.VisCellIndices.visCustPropsLabel].ResultStr[-1])
+                    return shape.CellsSRC[VIS_SECTION_PROP, rowIndex, (short) Visio.VisCellIndices.visCustPropsValue];
             }
 
             return null;
@@ -174,7 +141,9 @@ namespace HtmlFormData
 
         private string GetCellText(Visio.Cell cell)
         {
-            return cell.ResultStrU[(short)Visio.VisUnitCodes.visUnitsString];
+            return string.IsNullOrEmpty(cell.FormulaU) 
+                ? string.Empty
+                : cell.ResultStrU[(short)Visio.VisUnitCodes.visUnitsString];
         }
     }
 }

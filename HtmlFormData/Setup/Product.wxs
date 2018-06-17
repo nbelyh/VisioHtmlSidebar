@@ -5,8 +5,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
 
-	<?define Version="1.0.5.0"?>
-	<?define ProductCode = "{DF3C927B-3375-4E69-9B2A-0E72FC5C0152}" ?>
+	<?define Version="1.0.6.0"?>
+	<?define ProductCode = "{B8CF6BAA-1A16-4E4B-AD3E-3FD3D110E55A}" ?>
 	<?define UpgradeCode = "{b9cf0a85-a251-4749-b423-b8dbfcf230c9}" ?>
 
 	<Product Id="$(var.ProductCode)" Name="HtmlFormData" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
@@ -133,6 +133,10 @@
 			<!-- VSTO framework file -->
 			<Component>
 				<File Source="$(var.HtmlFormData.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
+			</Component>
+
+			<Component>
+				<File Source="$(var.HtmlFormData.TargetDir)AngleSharp.dll"></File>
 			</Component>
 
 			<!-- Add the addin manifest file -->

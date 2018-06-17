@@ -46,5 +46,17 @@ namespace HtmlFormData.Properties {
                 this["PropertyNamePlainText"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ReplaceDefaultHtmlReport {
+            get {
+                return ((bool)(this["ReplaceDefaultHtmlReport"]));
+            }
+            set {
+                this["ReplaceDefaultHtmlReport"] = value;
+            }
+        }
     }
 }

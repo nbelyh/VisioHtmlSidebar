@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -51,7 +50,7 @@ namespace HtmlFormData
 
             if (ControlShortcutKeys.Contains(keys))
             {
-                var msg = new NativeMethods.MSG
+                var msg = new Win32.MSG
                 {
                     hwnd = (IntPtr)msgWrap.hwnd,
                     message = (UInt32)msgWrap.message,
@@ -59,11 +58,11 @@ namespace HtmlFormData
                     lParam = (IntPtr)msgWrap.lParam
                 };
 
-                var accel = (NativeMethods.IOleInPlaceActiveObject)control.ActiveXInstance;
+                var accel = (Win32.IOleInPlaceActiveObject)control.ActiveXInstance;
                 if (accel.TranslateAccelerator(ref msg) == 0)
-                    NativeMethods.TranslateMessage(ref msg);
+                    Win32.TranslateMessage(ref msg);
 
-                NativeMethods.DispatchMessage(ref msg);
+                Win32.DispatchMessage(ref msg);
                 return true;
             }
 

@@ -34,13 +34,14 @@
             this.labelPropertyName = new System.Windows.Forms.Label();
             this.labelPropertyNamePlainText = new System.Windows.Forms.Label();
             this.textBoxPropertyNamePlainText = new System.Windows.Forms.TextBox();
+            this.checkBoxReplaceHtmlReports = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(86, 141);
+            this.buttonOK.Location = new System.Drawing.Point(143, 185);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -52,7 +53,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(174, 141);
+            this.buttonCancel.Location = new System.Drawing.Point(231, 185);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -65,7 +66,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPropertyName.Location = new System.Drawing.Point(19, 32);
             this.textBoxPropertyName.Name = "textBoxPropertyName";
-            this.textBoxPropertyName.Size = new System.Drawing.Size(230, 20);
+            this.textBoxPropertyName.Size = new System.Drawing.Size(287, 20);
             this.textBoxPropertyName.TabIndex = 2;
             // 
             // labelPropertyName
@@ -80,7 +81,7 @@
             // labelPropertyNamePlainText
             // 
             this.labelPropertyNamePlainText.AutoSize = true;
-            this.labelPropertyNamePlainText.Location = new System.Drawing.Point(16, 64);
+            this.labelPropertyNamePlainText.Location = new System.Drawing.Point(16, 65);
             this.labelPropertyNamePlainText.Name = "labelPropertyNamePlainText";
             this.labelPropertyNamePlainText.Size = new System.Drawing.Size(189, 13);
             this.labelPropertyNamePlainText.TabIndex = 5;
@@ -90,10 +91,20 @@
             // 
             this.textBoxPropertyNamePlainText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPropertyNamePlainText.Location = new System.Drawing.Point(19, 84);
+            this.textBoxPropertyNamePlainText.Location = new System.Drawing.Point(19, 85);
             this.textBoxPropertyNamePlainText.Name = "textBoxPropertyNamePlainText";
-            this.textBoxPropertyNamePlainText.Size = new System.Drawing.Size(230, 20);
+            this.textBoxPropertyNamePlainText.Size = new System.Drawing.Size(287, 20);
             this.textBoxPropertyNamePlainText.TabIndex = 4;
+            // 
+            // checkBoxReplaceHtmlReports
+            // 
+            this.checkBoxReplaceHtmlReports.AutoSize = true;
+            this.checkBoxReplaceHtmlReports.Location = new System.Drawing.Point(19, 136);
+            this.checkBoxReplaceHtmlReports.Name = "checkBoxReplaceHtmlReports";
+            this.checkBoxReplaceHtmlReports.Size = new System.Drawing.Size(232, 17);
+            this.checkBoxReplaceHtmlReports.TabIndex = 6;
+            this.checkBoxReplaceHtmlReports.Text = "Replace default HTML report (experimental)";
+            this.checkBoxReplaceHtmlReports.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -101,7 +112,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(259, 175);
+            this.ClientSize = new System.Drawing.Size(316, 219);
+            this.Controls.Add(this.checkBoxReplaceHtmlReports);
             this.Controls.Add(this.labelPropertyNamePlainText);
             this.Controls.Add(this.textBoxPropertyNamePlainText);
             this.Controls.Add(this.labelPropertyName);
@@ -125,5 +137,6 @@
         private System.Windows.Forms.Label labelPropertyName;
         private System.Windows.Forms.Label labelPropertyNamePlainText;
         private System.Windows.Forms.TextBox textBoxPropertyNamePlainText;
+        private System.Windows.Forms.CheckBox checkBoxReplaceHtmlReports;
     }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlFormData", "HtmlFormDat
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup", "HtmlFormData\Setup\Setup.wixproj", "{1046F51E-DDB0-42D8-8588-343044D9C1FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C7C0C142-AE7F-45BE-A73F-858F993914B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,14 @@ Global
 		{1046F51E-DDB0-42D8-8588-343044D9C1FA}.Release|Any CPU.ActiveCfg = Release|x86
 		{1046F51E-DDB0-42D8-8588-343044D9C1FA}.Release|x86.ActiveCfg = Release|x86
 		{1046F51E-DDB0-42D8-8588-343044D9C1FA}.Release|x86.Build.0 = Release|x86
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7C0C142-AE7F-45BE-A73F-858F993914B7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
