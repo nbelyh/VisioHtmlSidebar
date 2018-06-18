@@ -10,6 +10,7 @@ namespace HtmlFormData
             InitializeComponent();
             textBoxPropertyName.Text = Settings.Default.PropertyName;
             textBoxPropertyNamePlainText.Text = Settings.Default.PropertyNamePlainText;
+            checkBoxReplaceHtmlReports.Checked = Settings.Default.ReplaceDefaultHtmlReport;
         }
 
         private void buttonOK_Click(object sender, System.EventArgs e)
@@ -17,15 +18,14 @@ namespace HtmlFormData
             Settings.Default.PropertyName = textBoxPropertyName.Text;
             Settings.Default.PropertyNamePlainText = textBoxPropertyNamePlainText.Text;
 
-            if (checkBoxReplaceHtmlReports.Checked && !Settings.Default.ReplaceDefaultHtmlReport)
+            if (checkBoxReplaceHtmlReports.Checked != Settings.Default.ReplaceDefaultHtmlReport)
             {
-                RunReportHook.Install();
-                Settings.Default.ReplaceDefaultHtmlReport = true;
-            }
-            else if (!checkBoxReplaceHtmlReports.Checked && Settings.Default.ReplaceDefaultHtmlReport)
-            {
-                RunReportHook.Uninstall();
-                Settings.Default.ReplaceDefaultHtmlReport = false;
+                Settings.Default.ReplaceDefaultHtmlReport = checkBoxReplaceHtmlReports.Checked;
+
+                if (Settings.Default.ReplaceDefaultHtmlReport)
+                    RunReportHook.Install();
+                else
+                    RunReportHook.Uninstall();
             }
 
             Settings.Default.Save();
