@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddinCommandBars.cs" />
+    <Compile Include="StyleParser.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="UndoUnit.cs" />
   </ItemGroup>
