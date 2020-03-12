@@ -5,7 +5,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:visio="http://schemas.microsoft.com/wix/Visio" >
 
-	<?define Version="1.0.7.0"?>
+	<?define Version="111.111.111.111"?>
 	<?define ProductCode = "{B62047BA-FB02-4AAD-8575-D0654D89E1C8}" ?>
 	<?define UpgradeCode = "{b9cf0a85-a251-4749-b423-b8dbfcf230c9}" ?>
 
@@ -63,7 +63,7 @@
 		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
 		<!-- allow major upgrades -->
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="yes" />
 
 		<!-- allow fast installation -->
 		<Property Id="MSIFASTINSTALL" Value="7" />

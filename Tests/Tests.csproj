@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HtmlFormData\HtmlFormData\HtmlFormData.csproj">
+    <ProjectReference Include="..\HtmlFormData\HtmlFormData.csproj">
       <Project>{953e6f5a-bf4f-4db0-8319-3c3ed7bf6ca5}</Project>
       <Name>HtmlFormData</Name>
     </ProjectReference>
