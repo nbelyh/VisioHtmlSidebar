@@ -9,8 +9,8 @@ $old = "$($oldVersion.Major).$($oldVersion.Minor).$($oldVersion.Build)"
 $new = "$($newVersion.Major).$($newVersion.Minor).$($newVersion.Build)"
 
 $filesFull = 
-	".\HtmlFormData\HtmlFormData.csproj", 
-	".\HtmlFormData\Properties\AssemblyInfo.cs",
+	".\Addin\VisioHtmlSidebar.csproj", 
+	".\Addin\Properties\AssemblyInfo.cs",
 	".\Setup\Product.wxs",
 	".\Setup\Setup.wixproj"
 
@@ -21,8 +21,8 @@ $filesFull | ForEach-Object {
 }
 
 $files = 
-	".\HtmlFormData\HtmlFormData.csproj", 
-	".\HtmlFormData\Properties\AssemblyInfo.cs",
+	".\Addin\VisioHtmlSidebar.csproj", 
+	".\Addin\Properties\AssemblyInfo.cs",
 	".\Setup\Product.wxs",
 	".\Setup\Setup.wixproj"
 

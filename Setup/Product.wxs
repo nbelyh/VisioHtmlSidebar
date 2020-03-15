@@ -9,7 +9,7 @@
 	<?define ProductCode = "{B62047BA-FB02-4AAD-8575-D0654D89E1C8}" ?>
 	<?define UpgradeCode = "{b9cf0a85-a251-4749-b423-b8dbfcf230c9}" ?>
 
-	<Product Id="$(var.ProductCode)" Name="HtmlFormData" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
+	<Product Id="$(var.ProductCode)" Name="VisioHtmlSidebar" Language="1033" Version="$(var.Version)" Manufacturer="UnmanagedVisio" UpgradeCode="$(var.UpgradeCode)">
 		<Package InstallerVersion="200" Compressed="yes" />
 
 
@@ -74,6 +74,7 @@
 			<ComponentGroupRef Id="AddinFiles"/>
 			<ComponentGroupRef Id="Resources"/>
 			<ComponentGroupRef Id="Resources_edit_files"/>
+			<ComponentGroupRef Id="Resources_edit_font_files"/>
 		</Feature>
 
 		<!-- UI settings -->
@@ -81,7 +82,7 @@
 
 			<UIRef Id="WixUI_Advanced"/>
 			<Property Id="ALLUSERS" Value="2" />
-			<Property Id="ApplicationFolderName" Value="HtmlFormData" />
+			<Property Id="ApplicationFolderName" Value="VisioHtmlSidebar" />
 			<Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
 			<Publish Dialog="InstallScopeDlg" Control="Next" Property="MSIINSTALLPERUSER" Value="1" >WixAppFolder = "WixPerUserFolder"</Publish>
@@ -95,58 +96,86 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="APPLICATIONFOLDER" Name="HtmlFormData">
+				<Directory Id="APPLICATIONFOLDER" Name="VisioHtmlSidebar">
 					<Directory Id="Resources" Name="Resources">
-						<Directory Id="Resources_edit_files" Name="edit_files"></Directory>
+						<Directory Id="Resources_edit_files" Name="edit_files">
+              <Directory Id="Resources_edit_font_files" Name="font">
+                
+              </Directory>
+            </Directory>
 					</Directory>
 				</Directory>
 			</Directory>
 		</Directory>
 
-		<ComponentGroup Id="Resources" Source="$(var.HtmlFormData.TargetDir)\Resources" Directory="Resources">
+		<ComponentGroup Id="Resources" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources" Directory="Resources">
 			<Component>
 				<File Name="edit.html"></File>
 			</Component>
 		</ComponentGroup>
 
-		<ComponentGroup Id="Resources_edit_files" Source="$(var.HtmlFormData.TargetDir)\Resources\edit_files" Directory="Resources_edit_files">
-			<Component>
-				<File Name="quill.min.js"></File>
-			</Component>
-			<Component>
-				<File Name="quill.snow.css"></File>
-			</Component>
-		</ComponentGroup>
+    <ComponentGroup Id="Resources_edit_files" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources\edit_files" Directory="Resources_edit_files">
+      <Component>
+        <File Name="bootstrap.min.js"></File>
+      </Component>
+      <Component>
+        <File Name="bootstrap.min.css"></File>
+      </Component>
+      <Component>
+        <File Name="jquery-3.4.1.min.js"></File>
+      </Component>
+      <Component>
+        <File Name="summernote.min.js"></File>
+      </Component>
+      <Component>
+        <File Name="summernote.min.css"></File>
+      </Component>
+    </ComponentGroup>
+    
+    <ComponentGroup Id="Resources_edit_font_files" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources\edit_files\font" Directory="Resources_edit_font_files">
+      <Component>
+        <File Name="summernote.eot"></File>
+      </Component>
+      <Component>
+        <File Name="summernote.ttf"></File>
+      </Component>
+      <Component>
+        <File Name="summernote.woff"></File>
+      </Component>
+      <Component>
+        <File Name="summernote.woff2"></File>
+      </Component>
+    </ComponentGroup>
 
-		<!-- Addin files to be included in setup -->
+    <!-- Addin files to be included in setup -->
 		<ComponentGroup Id="AddinFiles" Directory="APPLICATIONFOLDER">
 
 			<!-- Add the addin dll to the setup. Reference using project referencing -->
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetPath)" ></File>
+				<File Source="$(var.VisioHtmlSidebar.TargetPath)" ></File>
 			</Component>
 
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetPath).config" ></File>
+				<File Source="$(var.VisioHtmlSidebar.TargetPath).config" ></File>
 			</Component>
 
 			<!-- VSTO framework file -->
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
+				<File Source="$(var.VisioHtmlSidebar.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll"></File>
 			</Component>
 
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetDir)AngleSharp.dll"></File>
+				<File Source="$(var.VisioHtmlSidebar.TargetDir)AngleSharp.dll"></File>
 			</Component>
 
 			<!-- Add the addin manifest file -->
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetPath).manifest"></File>
+				<File Source="$(var.VisioHtmlSidebar.TargetPath).manifest"></File>
 			</Component>
 
 			<!--  The .vsto file is addin discovery file. Set up registry to point to this file using |vstolocal -->
 			<Component>
-				<File Source="$(var.HtmlFormData.TargetDir)$(var.HtmlFormData.TargetName).vsto">
+				<File Source="$(var.VisioHtmlSidebar.TargetDir)$(var.VisioHtmlSidebar.TargetName).vsto">
 					<visio:PublishAddin />
 				</File>
 			</Component>

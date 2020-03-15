@@ -7,5 +7,5 @@ Write-Host "SIGNTOOL " $signtool
 ForEach ($file in (Get-ChildItem "Setup\bin\Release\*.msi"))
 {
 	Write-Host $file.FullName
-	&$signtool sign /n "Nikolay Belykh" /v /fd sha256 /tr $timestampUrl /td sha256 /d "Visio HtmlFormData Addin" /du "https://unmanagedvisio.com" $file.FullName
+	&$signtool sign /n "Nikolay Belykh" /v /fd sha256 /tr $timestampUrl /td sha256 /d "Visio VisioHtmlSidebar Addin" /du "https://unmanagedvisio.com" $file.FullName
 }
