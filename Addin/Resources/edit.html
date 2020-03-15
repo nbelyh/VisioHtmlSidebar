@@ -8,15 +8,9 @@
     <script src="edit_files/bootstrap.min.js"></script>
     <link href="edit_files/summernote.min.css" rel="stylesheet">
     <script src="edit_files/summernote.min.js"></script>
-    <style>
-        body {
-            padding: 1em;
-        }
-    </style>
 </head>
-<body>
+<body style="padding: 1em">
     <div id="editor"></div>
-    <hr />
     <button id="edit" class="btn btn-primary" onclick="edit()">Edit</button>
     <button id="save" style="display:none" class="btn btn-primary" onclick="save()">Save</button>
     <button id="cancel" style="display:none" class="btn btn-default" onclick="cancel()">Cancel</button>
@@ -32,35 +26,46 @@
         }
 
         function disableEditor() {
-            if (editing)
-                $("#editor").summernote('destroy');
+            save();
+            $("#edit").hide();
         }
 
         function setEditorHtml(html) {
             htmlSource = html;
             $("#editor").html(html);
+            $("#edit").show();
         }
 
         function edit() {
-            $("#editor").summernote();
-            $("#edit").hide();
-            $("#save").show();
-            $("#cancel").show();
+            if (!editing) {
+                $("#editor").summernote();
+                $("#edit").hide();
+                $("#save").show();
+                $("#cancel").show();
+                editing = true;
+            }
         }
 
         function save() {
-            $("#editor").summernote('destroy');
-            $("#edit").show();
-            $("#save").hide();
-            $("#cancel").hide();
+            if (editing) {
+                window.external.SaveEditorToShape();
+                $("#editor").summernote('destroy');
+                $("#edit").show();
+                $("#save").hide();
+                $("#cancel").hide();
+                editing = false;
+            }
         }
 
         function cancel() {
-            $("#editor").summernote('destroy');
-            $("#editor").html(htmlSource);
-            $("#edit").show();
-            $("#save").hide();
-            $("#cancel").hide();
+            if (editing) {
+                $("#editor").summernote('destroy');
+                $("#editor").html(htmlSource);
+                $("#edit").show();
+                $("#save").hide();
+                $("#cancel").hide();
+                editing = false;
+            }
         }
 
     </script>

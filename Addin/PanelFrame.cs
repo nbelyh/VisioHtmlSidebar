@@ -137,8 +137,8 @@ namespace VisioHtmlSidebar
                         VisWinTypes.visAnchorBarAddon,
                         0,
                         0,
-                        400,
-                        400,
+                        450,
+                        450,
                         AddonWindowMergeId,
                         string.Empty,
                         0);

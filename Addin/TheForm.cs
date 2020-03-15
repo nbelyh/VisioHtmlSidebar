@@ -33,6 +33,8 @@ namespace VisioHtmlSidebar
             _window = window;
             InitializeComponent();
 
+            webBrowser.ObjectForScripting = this;
+
             Win32.DisableClickSounds(true);
 
             webBrowser.DocumentCompleted += WebBrowserOnDocumentCompleted;
@@ -40,7 +42,7 @@ namespace VisioHtmlSidebar
 
             _editorShape = _window.Selection.PrimaryItem;
             ReloadEditor();
-            
+
             Closed += OnClosed;
         }
 
@@ -77,7 +79,7 @@ namespace VisioHtmlSidebar
             ReloadEditor();
         }
 
-        void SaveEditorToShape()
+        public void SaveEditorToShape()
         {
             if (_editorShape == null)
                 return;

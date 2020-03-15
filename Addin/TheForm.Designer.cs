@@ -36,14 +36,14 @@
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webBrowser.Location = new System.Drawing.Point(0, 0);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(393, 629);
+            this.webBrowser.Size = new System.Drawing.Size(443, 629);
             this.webBrowser.TabIndex = 0;
             // 
             // TheForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 629);
+            this.ClientSize = new System.Drawing.Size(443, 629);
             this.ControlBox = false;
             this.Controls.Add(this.webBrowser);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -52,7 +52,7 @@
             this.Name = "TheForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Panel";
+            this.Text = "Html Sidebar";
             this.ResumeLayout(false);
 
         }
