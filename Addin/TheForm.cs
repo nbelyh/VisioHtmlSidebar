@@ -52,13 +52,16 @@ namespace VisioHtmlSidebar
             Win32.DisableClickSounds(false);
         }
 
+        Visio.Shape TargetShape => 
+            _editorShape ?? _window.PageAsObj.PageSheet;
+
         private void WebBrowserOnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs args)
         {
             var document = webBrowser.Document;
             if (document == null)
                 return;
 
-            var targetCell = GetTargetCell(_editorShape, Settings.Default.PropertyName);
+            var targetCell = GetTargetCell(TargetShape, Settings.Default.PropertyName);
             if (targetCell != null)
             {
                 _currentShapeHtml = GetCellText(targetCell);
@@ -81,10 +84,10 @@ namespace VisioHtmlSidebar
 
         public void SaveEditorToShape()
         {
-            if (_editorShape == null)
+            if (TargetShape == null)
                 return;
 
-            var targetCell = GetTargetCell(_editorShape, Settings.Default.PropertyName);
+            var targetCell = GetTargetCell(TargetShape, Settings.Default.PropertyName);
             if (targetCell == null)
                 return;
 
@@ -92,12 +95,12 @@ namespace VisioHtmlSidebar
             if (document == null)
                 return;
 
-            var newHtml = document.InvokeScript("getEditorHtml").ToString();
+            var newHtml = document.InvokeScript("getEditorHtml")?.ToString() ?? string.Empty;
             if (newHtml != _currentShapeHtml)
             {
                 SetCellText(targetCell, newHtml);
 
-                var targetPlainTextCell = GetTargetCell(_editorShape, Settings.Default.PropertyNamePlainText);
+                var targetPlainTextCell = GetTargetCell(TargetShape, Settings.Default.PropertyNamePlainText);
                 if (targetPlainTextCell != null)
                 {
                     var parser = new HtmlParser();
