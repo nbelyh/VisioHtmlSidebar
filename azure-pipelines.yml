@@ -37,40 +37,41 @@ stages:
 
     - task: PowerShell@2
       displayName: Set Version
-      targetType: 'inline'
-      script: |
-        $newFull = $(Build.BuildNumber)
-        $oldFull = "111.111.111.111"
+      inputs:
+        targetType: 'inline'
+        script: |
+          $newFull = $(Build.BuildNumber)
+          $oldFull = "111.111.111.111"
 
-        $oldVersion = $oldFull|%{[System.Version]$_}
-        $newVersion = $newFull|%{[System.Version]$_}
+          $oldVersion = $oldFull|%{[System.Version]$_}
+          $newVersion = $newFull|%{[System.Version]$_}
 
-        $old = "$($oldVersion.Major).$($oldVersion.Minor).$($oldVersion.Build)"
-        $new = "$($newVersion.Major).$($newVersion.Minor).$($newVersion.Build)"
+          $old = "$($oldVersion.Major).$($oldVersion.Minor).$($oldVersion.Build)"
+          $new = "$($newVersion.Major).$($newVersion.Minor).$($newVersion.Build)"
 
-        $filesFull = 
-          ".\Addin\VisioHtmlSidebar.csproj", 
-          ".\Addin\Properties\AssemblyInfo.cs",
-          ".\Setup\Product.wxs",
-          ".\Setup\Setup.wixproj"
+          $filesFull = 
+            "./Addin/VisioHtmlSidebar.csproj", 
+            "./Addin/Properties/AssemblyInfo.cs",
+            "./Setup/Product.wxs",
+            "./Setup/Setup.wixproj"
 
-        $filesFull | ForEach-Object { 
-          
-          $fileFull = $_
-          (Get-Content $fileFull) | ForEach-Object { $_ -replace $oldFull, $newFull } | Set-Content $fileFull
-        }
+          $filesFull | ForEach-Object { 
+            
+            $fileFull = $_
+            (Get-Content $fileFull) | ForEach-Object { $_ -replace $oldFull, $newFull } | Set-Content $fileFull
+          }
 
-        $files = 
-          ".\Addin\VisioHtmlSidebar.csproj", 
-          ".\Addin\Properties\AssemblyInfo.cs",
-          ".\Setup\Product.wxs",
-          ".\Setup\Setup.wixproj"
+          $files = 
+            "./Addin/VisioHtmlSidebar.csproj", 
+            "./Addin/Properties/AssemblyInfo.cs",
+            "./Setup/Product.wxs",
+            "./Setup/Setup.wixproj"
 
-        $files | ForEach-Object { 
-          
-          $file = $_
-          (Get-Content $file) | ForEach-Object { $_ -replace $old, $new } | Set-Content $file
-        }
+          $files | ForEach-Object { 
+            
+            $file = $_
+            (Get-Content $file) | ForEach-Object { $_ -replace $old, $new } | Set-Content $file
+          }
 
     - task: DownloadSecureFile@1
       displayName: Download Certificate
@@ -79,12 +80,13 @@ stages:
 
     - task: PowerShell@2
       displayName: import Certificate
-      targetType: 'inline'
-      script: |
-        $pfx = $env:DOWNLOADSECUREFILE_SECUREFILEPATH
-        $pw = $(CertPass)
-        $pfxpass = $pw | ConvertTo-SecureString -AsPlainText -Force
-        Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pfxpass 
+      inputs:
+        targetType: 'inline'
+        script: |
+          $pfx = $env:DOWNLOADSECUREFILE_SECUREFILEPATH
+          $pw = $(CertPass)
+          $pfxpass = $pw | ConvertTo-SecureString -AsPlainText -Force
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pfxpass 
 
     - task: NuGetToolInstaller@1
 
@@ -100,19 +102,20 @@ stages:
 
     - task: PowerShell@2
       displayName: Sign files
-      targetType: 'inline'
-      script: |
-        $timestampUrl = "http://timestamp.digicert.com"
-        Write-Host "TIMESTAMP " $timestampUrl
+      inputs:
+        targetType: 'inline'
+        script: |
+          $timestampUrl = "http://timestamp.digicert.com"
+          Write-Host "TIMESTAMP " $timestampUrl
 
-        $signtool = "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe"
-        Write-Host "SIGNTOOL " $signtool
-        
-        ForEach ($file in (Get-ChildItem "Setup\bin\Release\*.msi"))
-        {
-          Write-Host $file.FullName
-          &$signtool sign /n "Nikolay Belykh" /v /fd sha256 /tr $timestampUrl /td sha256 /d "Visio VisioHtmlSidebar Addin" /du "https://unmanagedvisio.com" $file.FullName
-        }
+          $signtool = "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe"
+          Write-Host "SIGNTOOL " $signtool
+          
+          ForEach ($file in (Get-ChildItem "Setup\bin\Release\*.msi"))
+          {
+            Write-Host $file.FullName
+            &$signtool sign /n "Nikolay Belykh" /v /fd sha256 /tr $timestampUrl /td sha256 /d "Visio VisioHtmlSidebar Addin" /du "https://unmanagedvisio.com" $file.FullName
+          }
 
     - task: VSTest@2
       displayName: Run  tests
