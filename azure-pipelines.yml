@@ -22,9 +22,9 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: Version
-  value: '1.0.7'
+  value: '1.1'
 
-name: $(Version).$(BuildID)
+name: $(Version).$(DayOfYear)$(Rev:r)
 
 stages:
 - stage: Build
@@ -38,8 +38,22 @@ stages:
     - task: PowerShell@2
       displayName: Set Version
       inputs:
-        filePath: 'Build/set_version.ps1'
-        arguments: '$(Build.BuildNumber)'
+        targetType: 'inline'
+        script: |
+          $versionFull = "$(Build.BuildNumber)"
+          $version = $versionFull|%{[System.Version]$_}
+          $versionShort = "$($version.Major).$($version.Minor).$($version.Build)"
+          $versionTemplate = "111.111.111"
+          $files = 
+            "./Addin/VisioHtmlSidebar.csproj", 
+            "./Addin/Properties/AssemblyInfo.cs",
+            "./Setup/Product.wxs",
+            "./Setup/Setup.wixproj"
+          $files | ForEach-Object {
+            $file = $_
+            (Get-Content $file) | ForEach-Object { $_ -replace $versionTemplate, $versionShort } | Set-Content $file
+          }
+          Write-Host "##vso[task.setvariable variable=versionShort]$($versionShort)"
 
     - task: DownloadSecureFile@1
       displayName: Download Certificate
@@ -49,8 +63,12 @@ stages:
     - task: PowerShell@2
       displayName: import Certificate
       inputs:
-        filePath: 'Build/import_certificate.ps1'
-        arguments: '$env:DOWNLOADSECUREFILE_SECUREFILEPATH $(CertPass)'
+        targetType: 'inline'
+        script: |
+          $pfx = "$env:DOWNLOADSECUREFILE_SECUREFILEPATH"
+          $pw = "$(CertPass)"
+          $pfxpass = $pw | ConvertTo-SecureString -AsPlainText -Force
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pfxpass 
 
     - task: NuGetToolInstaller@1
 
@@ -67,7 +85,19 @@ stages:
     - task: PowerShell@2
       displayName: Sign files
       inputs:
-        filePath: 'Build/sign_binaries.ps1'
+        targetType: 'inline'
+        script: |
+          $timestampUrl = "http://timestamp.digicert.com"
+          Write-Host "TIMESTAMP " $timestampUrl
+
+          $signtool = "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe"
+          Write-Host "SIGNTOOL " $signtool
+          
+          ForEach ($file in (Get-ChildItem "Setup\bin\Release\*.msi"))
+          {
+            Write-Host $file.FullName
+            &$signtool sign /n "Nikolay Belykh" /v /fd sha256 /tr $timestampUrl /td sha256 /d "Visio VisioHtmlSidebar Addin" /du "https://unmanagedvisio.com" $file.FullName
+          }
 
     - task: VSTest@2
       displayName: Run  tests
