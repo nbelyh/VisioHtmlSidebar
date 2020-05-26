@@ -84,8 +84,7 @@ stages:
         targetType: 'inline'
         script: |
           $pfx = $env:DOWNLOADSECUREFILE_SECUREFILEPATH
-          $pw = $(CertPass)
-          $pfxpass = $pw | ConvertTo-SecureString -AsPlainText -Force
+          $pfxpass = $(CertPass) | ConvertTo-SecureString -AsPlainText -Force
           Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\\CurrentUser\\My -Password $pfxpass 
 
     - task: NuGetToolInstaller@1
