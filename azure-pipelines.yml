@@ -44,7 +44,7 @@ stages:
           $version = $versionFull|%{[System.Version]$_}
           $versionShort = "$($version.Major).$($version.Minor).$($version.Build)"
           $versionTemplate = "111.111.111"
-          $filesFull = 
+          $files = 
             "./Addin/VisioHtmlSidebar.csproj", 
             "./Addin/Properties/AssemblyInfo.cs",
             "./Setup/Product.wxs",
