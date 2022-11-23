@@ -111,14 +111,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>Interop\Microsoft.Office.Interop.Visio.dll</HintPath>
     </Reference>
-    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddinCommandBars.cs" />
     <Compile Include="StyleParser.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="UndoUnit.cs" />

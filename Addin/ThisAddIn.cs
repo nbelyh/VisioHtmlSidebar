@@ -118,7 +118,6 @@ namespace VisioHtmlSidebar
 
         internal void UpdateUI()
         {
-            AddinUI.UpdateCommandBars();
             AddinUI.UpdateRibbon();
         }
 
@@ -145,8 +144,6 @@ namespace VisioHtmlSidebar
 
             _panelManager = new PanelManager(this);
             var version = int.Parse(Application.Version, NumberStyles.AllowDecimalPoint);
-            if (version < 14)
-                AddinUI.StartupCommandBars("VisioHtmlSidebar", new[] { "TogglePanel", "Command2", });
             Application.SelectionChanged += Application_SelectionChanged;
             Application.OnKeystrokeMessageForAddon += _shortcutManager.OnKeystrokeMessageForAddon;
         }
@@ -156,7 +153,6 @@ namespace VisioHtmlSidebar
             if (Settings.Default.ReplaceDefaultHtmlReport)
                 RunReportHook.Uninstall();
 
-            AddinUI.ShutdownCommandBars();
             _panelManager.Dispose();
             Application.SelectionChanged -= Application_SelectionChanged;
             Application.OnKeystrokeMessageForAddon -= _shortcutManager.OnKeystrokeMessageForAddon;
