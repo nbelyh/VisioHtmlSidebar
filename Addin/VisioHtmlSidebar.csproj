@@ -9,7 +9,7 @@
     <RootNamespace>VisioHtmlSidebar</RootNamespace>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>VisioHtmlSidebar</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <IsWebBootstrapper>False</IsWebBootstrapper>
