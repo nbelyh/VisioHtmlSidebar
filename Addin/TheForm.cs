@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AngleSharp.Parser.Html;
+using Newtonsoft.Json;
 using VisioHtmlSidebar.Properties;
 using Visio = Microsoft.Office.Interop.Visio;
 
@@ -16,6 +18,9 @@ namespace VisioHtmlSidebar
         private string _currentShapeHtml;
 
         private readonly Visio.Window _window;
+
+        private Control browserControl;
+        private IBrowserApi browserApi;
 
         static string GetResourcePath(string fileName)
         {
@@ -33,17 +38,17 @@ namespace VisioHtmlSidebar
             _window = window;
             InitializeComponent();
 
-            webBrowser.ObjectForScripting = this;
-
             Win32.DisableClickSounds(true);
 
-            webBrowser.DocumentCompleted += WebBrowserOnDocumentCompleted;
             _window.SelectionChanged += WindowOnSelectionChanged;
-
             _editorShape = _window.Selection.PrimaryItem;
-            ReloadEditor();
 
             Closed += OnClosed;
+
+            if (Settings.Default.EnableWebView2)
+                browserApi = new BrowserWebView2();
+            else
+                browserApi = new BrowserWebControl();
         }
 
         private void OnClosed(object sender, EventArgs eventArgs)
@@ -55,25 +60,6 @@ namespace VisioHtmlSidebar
         Visio.Shape TargetShape => 
             _editorShape ?? _window.PageAsObj.PageSheet;
 
-        private void WebBrowserOnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs args)
-        {
-            var document = webBrowser.Document;
-            if (document == null)
-                return;
-
-            var targetCell = GetTargetCell(TargetShape, Settings.Default.PropertyName);
-            if (targetCell != null)
-            {
-                _currentShapeHtml = GetCellText(targetCell);
-                document.InvokeScript("setEditorHtml", new object[] {_currentShapeHtml});
-            }
-            else
-            {
-                _currentShapeHtml = string.Empty;
-                document.InvokeScript("disableEditor");
-            }
-        }
-
         private void WindowOnSelectionChanged(Visio.Window window)
         {
             SaveEditorToShape();
@@ -82,7 +68,7 @@ namespace VisioHtmlSidebar
             ReloadEditor();
         }
 
-        public void SaveEditorToShape()
+        async public void SaveEditorToShape()
         {
             if (TargetShape == null)
                 return;
@@ -91,11 +77,7 @@ namespace VisioHtmlSidebar
             if (targetCell == null)
                 return;
 
-            var document = webBrowser.Document;
-            if (document == null)
-                return;
-
-            var newHtml = document.InvokeScript("getEditorHtml")?.ToString() ?? string.Empty;
+            var newHtml = await browserApi.ExecuteScript(this.browserControl, "getEditorHtml", null);
             if (newHtml != _currentShapeHtml)
             {
                 SetCellText(targetCell, newHtml);
@@ -114,9 +96,19 @@ namespace VisioHtmlSidebar
             }
         }
 
-        private void ReloadEditor()
+        private async void ReloadEditor()
         {
-            webBrowser.Navigate(new Uri(GetResourcePath(@"edit.html")));
+            var targetCell = GetTargetCell(TargetShape, Settings.Default.PropertyName);
+            if (targetCell != null)
+            {
+                _currentShapeHtml = GetCellText(targetCell);
+                await browserApi.ExecuteScript(browserControl, "setEditorHtml", _currentShapeHtml);
+            }
+            else
+            {
+                _currentShapeHtml = string.Empty;
+                await browserApi.ExecuteScript(browserControl, "disableEditor", null);
+            }
         }
 
         private Visio.Cell GetTargetCell(Visio.Shape shape, string propName)
@@ -153,6 +145,22 @@ namespace VisioHtmlSidebar
             return string.IsNullOrEmpty(cell.FormulaU) 
                 ? string.Empty
                 : cell.ResultStrU[(short)Visio.VisUnitCodes.visUnitsString];
+        }
+
+        private void TheForm_Load(object sender, EventArgs e)
+        {
+            InitBrowser();
+        }
+
+        private async void InitBrowser()
+        {
+            this.browserControl = browserApi.Create();
+
+            await browserApi.ConfigureEnvironment(browserControl);
+
+            Controls.Add(browserControl);
+
+            browserApi.Navigate(browserControl, GetResourcePath(@"edit.html"), () => { }, (target, cookies) => { });
         }
     }
 }

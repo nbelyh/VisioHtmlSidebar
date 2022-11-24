@@ -6,6 +6,8 @@ using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using System.Net;
 using System.Web;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace VisioHtmlSidebar
 {
@@ -71,11 +73,31 @@ namespace VisioHtmlSidebar
             };
         }
 
-        public Task<string> ExecuteScript(Control editor, string name, string val)
+        public static string JavaScriptStringDecode(string source)
+        {
+            // Replace some chars.
+            var decoded = source.Trim('"')
+                    .Replace(@"\'", "'")
+                    .Replace(@"\""", @"""")
+                    .Replace(@"\/", "/")
+                    .Replace(@"\t", "\t")
+                    .Replace(@"\n", "\n");
+
+            // Replace unicode escaped text.
+            var rx = new Regex(@"\\[uU]([0-9A-F]{4})");
+
+            decoded = rx.Replace(decoded, match => ((char)int.Parse(match.Value.Substring(2), NumberStyles.HexNumber))
+                                                    .ToString(CultureInfo.InvariantCulture));
+
+            return decoded;
+        }
+
+        public async Task<string> ExecuteScript(Control editor, string name, string val)
         {
             var webView2 = editor as WebView2;
             var param = HttpUtility.JavaScriptStringEncode(val, true);
-            return webView2.ExecuteScriptAsync($"{name}({param})");
+            var result = await webView2.ExecuteScriptAsync($"{name}({param})");
+            return JavaScriptStringDecode(result);
         }
     }
 }

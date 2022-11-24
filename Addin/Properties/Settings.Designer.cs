@@ -58,5 +58,17 @@ namespace VisioHtmlSidebar.Properties {
                 this["ReplaceDefaultHtmlReport"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableWebView2 {
+            get {
+                return ((bool)(this["EnableWebView2"]));
+            }
+            set {
+                this["EnableWebView2"] = value;
+            }
+        }
     }
 }
