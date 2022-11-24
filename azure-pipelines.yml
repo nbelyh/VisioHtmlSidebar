@@ -90,7 +90,7 @@ stages:
           $timestampUrl = "http://timestamp.digicert.com"
           Write-Host "TIMESTAMP " $timestampUrl
 
-          $signtool = "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe"
+          $signtool = "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe"
           Write-Host "SIGNTOOL " $signtool
           
           ForEach ($file in (Get-ChildItem "Setup\bin\Release\*.msi"))
