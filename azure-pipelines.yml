@@ -149,11 +149,3 @@ stages:
         isPreRelease: true
         changeLogCompareToRelease: 'lastFullRelease'
         changeLogType: 'commitBased'
-
-    - task: AzureFileCopy@4
-      inputs:
-        SourcePath: '$(System.ArtifactsDirectory)\setup\*'
-        azureSubscription: 'Visual Studio Enterprise(f5564b95-9d43-4694-8b8e-faa0ce8c1d47)'
-        Destination: 'AzureBlob'
-        storage: 'uvreleases'
-        ContainerName: 'visiohtmlsidebar'
