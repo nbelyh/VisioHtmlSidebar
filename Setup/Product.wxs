@@ -73,8 +73,7 @@
 		<Feature Id="ProductFeature" Title="Setup" Level="1">
 			<ComponentGroupRef Id="AddinFiles"/>
 			<ComponentGroupRef Id="Resources"/>
-			<ComponentGroupRef Id="Resources_edit_files"/>
-			<ComponentGroupRef Id="Resources_edit_font_files"/>
+			<ComponentGroupRef Id="Resources_quill"/>
 		</Feature>
 
 		<!-- UI settings -->
@@ -98,7 +97,7 @@
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="APPLICATIONFOLDER" Name="VisioHtmlSidebar">
 					<Directory Id="Resources" Name="Resources">
-						<Directory Id="Resources_edit_files" Name="edit_files">
+						<Directory Id="Resources_quill" Name="quill">
               <Directory Id="Resources_edit_font_files" Name="font">
                 
               </Directory>
@@ -114,39 +113,18 @@
 			</Component>
 		</ComponentGroup>
 
-    <ComponentGroup Id="Resources_edit_files" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources\edit_files" Directory="Resources_edit_files">
+    <ComponentGroup Id="Resources_quill" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources\quill" Directory="Resources_quill">
       <Component>
-        <File Name="bootstrap.min.js"></File>
+        <File Name="quill.min.js"></File>
       </Component>
       <Component>
-        <File Name="bootstrap.min.css"></File>
+        <File Name="quill.snow.min.css"></File>
       </Component>
       <Component>
-        <File Name="jquery-3.4.1.min.js"></File>
-      </Component>
-      <Component>
-        <File Name="summernote.min.js"></File>
-      </Component>
-      <Component>
-        <File Name="summernote.min.css"></File>
+        <File Name="image-resize.min.js"></File>
       </Component>
     </ComponentGroup>
     
-    <ComponentGroup Id="Resources_edit_font_files" Source="$(var.VisioHtmlSidebar.TargetDir)\Resources\edit_files\font" Directory="Resources_edit_font_files">
-      <Component>
-        <File Name="summernote.eot"></File>
-      </Component>
-      <Component>
-        <File Name="summernote.ttf"></File>
-      </Component>
-      <Component>
-        <File Name="summernote.woff"></File>
-      </Component>
-      <Component>
-        <File Name="summernote.woff2"></File>
-      </Component>
-    </ComponentGroup>
-
     <!-- Addin files to be included in setup -->
 		<ComponentGroup Id="AddinFiles" Directory="APPLICATIONFOLDER">
 

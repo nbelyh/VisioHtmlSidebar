@@ -10,7 +10,6 @@ namespace VisioHtmlSidebar
 {
     public partial class ThisAddIn
     {
-        private bool IsEditing = false;
         private readonly AddinUI AddinUI = new AddinUI();
         private readonly ShortcutManager _shortcutManager = new ShortcutManager();
 
@@ -31,7 +30,7 @@ namespace VisioHtmlSidebar
 
         void SetIsEditing(bool set)
         {
-            IsEditing = set;
+            Settings.Default.EditMode= set;
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace VisioHtmlSidebar
                     return;
 
                 case "ToggleEdit":
-                    SetIsEditing(!IsEditing);
+                    SetIsEditing(!Settings.Default.EditMode);
                     return;
 
                 case "TogglePanel":
@@ -90,7 +89,7 @@ namespace VisioHtmlSidebar
                 return IsPanelVisible();
 
             if (command == "ToggleEdit")
-                return IsEditing;
+                return Settings.Default.EditMode;
 
             return false;
         }

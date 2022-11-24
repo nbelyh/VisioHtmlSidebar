@@ -49,6 +49,13 @@ namespace VisioHtmlSidebar
                 browserApi = new BrowserWebView2();
             else
                 browserApi = new BrowserWebControl();
+
+            Settings.Default.PropertyChanged += Default_PropertyChanged;
+        }
+
+        private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            ReloadEditor();
         }
 
         private void OnClosed(object sender, EventArgs eventArgs)
@@ -99,16 +106,9 @@ namespace VisioHtmlSidebar
         private async void ReloadEditor()
         {
             var targetCell = GetTargetCell(TargetShape, Settings.Default.PropertyName);
-            if (targetCell != null)
-            {
-                _currentShapeHtml = GetCellText(targetCell);
-                await browserApi.ExecuteScript(browserControl, "setEditorHtml", _currentShapeHtml);
-            }
-            else
-            {
-                _currentShapeHtml = string.Empty;
-                await browserApi.ExecuteScript(browserControl, "disableEditor", null);
-            }
+            _currentShapeHtml = (targetCell != null) ? GetCellText(targetCell) : string.Empty;
+            await browserApi.ExecuteScript(browserControl, "setEnabled", Settings.Default.EditMode ? "true" : null);
+            await browserApi.ExecuteScript(browserControl, "setEditorHtml", _currentShapeHtml);
         }
 
         private Visio.Cell GetTargetCell(Visio.Shape shape, string propName)

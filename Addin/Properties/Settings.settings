@@ -17,5 +17,8 @@
     <Setting Name="SidebarWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">450</Value>
     </Setting>
+    <Setting Name="EditMode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

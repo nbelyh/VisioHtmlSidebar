@@ -82,5 +82,17 @@ namespace VisioHtmlSidebar.Properties {
                 this["SidebarWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EditMode {
+            get {
+                return ((bool)(this["EditMode"]));
+            }
+            set {
+                this["EditMode"] = value;
+            }
+        }
     }
 }
