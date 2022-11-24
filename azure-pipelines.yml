@@ -58,7 +58,7 @@ stages:
     - task: DownloadSecureFile@1
       displayName: Download Certificate
       inputs:
-        secureFile: 'sectigo.pfx'
+        secureFile: 'sectigo2025.pfx'
 
     - task: PowerShell@2
       displayName: import Certificate
@@ -66,7 +66,7 @@ stages:
         targetType: 'inline'
         script: |
           $pfx = "$env:DOWNLOADSECUREFILE_SECUREFILEPATH"
-          $pw = "$(CertPass)"
+          $pw = "$(CertPass2025)"
           $pfxpass = $pw | ConvertTo-SecureString -AsPlainText -Force
           Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pfxpass 
 
