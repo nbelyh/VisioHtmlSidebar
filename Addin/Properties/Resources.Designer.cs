@@ -61,31 +61,11 @@ namespace VisioHtmlSidebar.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Command2 {
-            get {
-                object obj = ResourceManager.GetObject("Command2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Command2_Label {
             get {
                 return ResourceManager.GetString("Command2_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Command2_sm {
-            get {
-                object obj = ResourceManager.GetObject("Command2_sm", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -100,11 +80,30 @@ namespace VisioHtmlSidebar.Properties {
         ///          &lt;toggleButton id=&quot;TogglePanel&quot; getLabel=&quot;OnGetRibbonLabel&quot; size=&quot;large&quot;
         ///                        onAction=&quot;OnRibbonButtonCheckClick&quot; getEnabled=&quot;IsRibbonCommandEnabled&quot; getImage=&quot;GetRibbonImage&quot; getPressed=&quot;IsRibbonCommandChecked&quot; /&gt;
         ///
-        ///          &lt;dialogBoxLauncher&gt; [rest of string was truncated]&quot;;.
+        ///          &lt;toggleButton id=&quot;T [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Ribbon {
             get {
                 return ResourceManager.GetString("Ribbon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToggleEdit {
+            get {
+                object obj = ResourceManager.GetObject("ToggleEdit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Edit.
+        /// </summary>
+        internal static string ToggleEdit_Label {
+            get {
+                return ResourceManager.GetString("ToggleEdit_Label", resourceCulture);
             }
         }
         
@@ -119,21 +118,11 @@ namespace VisioHtmlSidebar.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Editor.
+        ///   Looks up a localized string similar to Toggle Sidebar.
         /// </summary>
         internal static string TogglePanel_Label {
             get {
                 return ResourceManager.GetString("TogglePanel_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap TogglePanel_sm {
-            get {
-                object obj = ResourceManager.GetObject("TogglePanel_sm", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

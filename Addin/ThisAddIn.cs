@@ -10,6 +10,7 @@ namespace VisioHtmlSidebar
 {
     public partial class ThisAddIn
     {
+        private bool IsEditing = false;
         private readonly AddinUI AddinUI = new AddinUI();
         private readonly ShortcutManager _shortcutManager = new ShortcutManager();
 
@@ -22,10 +23,15 @@ namespace VisioHtmlSidebar
         /// A command to demonstrate conditionally enabling/disabling.
         /// The command gets enabled only when a shape is selected
         /// </summary>
-        public void Command2()
+        public void OpenSettings()
         {
             var settingsForm = new SettingsForm();
             settingsForm.ShowDialog();
+        }
+
+        void SetIsEditing(bool set)
+        {
+            IsEditing = set;
         }
 
         /// <summary>
@@ -36,8 +42,12 @@ namespace VisioHtmlSidebar
         {
             switch (commandId)
             {
-                case "Command2":
-                    Command2();
+                case "OpenSettings":
+                    OpenSettings();
+                    return;
+
+                case "ToggleEdit":
+                    SetIsEditing(!IsEditing);
                     return;
 
                 case "TogglePanel":
@@ -55,8 +65,11 @@ namespace VisioHtmlSidebar
         {
             switch (commandId)
             {
-                case "Command2":    // make command2 always enabled
+                case "OpenSettings":    // make command2 always enabled
                     return true;
+
+                case "ToggleEdit":
+                    return IsPanelEnabled();
 
                 case "TogglePanel": // make panel enabled only if we have selected shape(s).
                     return IsPanelEnabled();
@@ -75,6 +88,9 @@ namespace VisioHtmlSidebar
 
             if (command == "TogglePanel")
                 return IsPanelVisible();
+
+            if (command == "ToggleEdit")
+                return IsEditing;
 
             return false;
         }

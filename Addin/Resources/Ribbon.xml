@@ -8,8 +8,11 @@
           <toggleButton id="TogglePanel" getLabel="OnGetRibbonLabel" size="large"
                         onAction="OnRibbonButtonCheckClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" getPressed="IsRibbonCommandChecked" />
 
+          <toggleButton id="ToggleEdit" getLabel="OnGetRibbonLabel" size="large"
+                        onAction="OnRibbonButtonCheckClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" getPressed="IsRibbonCommandChecked" />
+
           <dialogBoxLauncher>
-            <button id="Command2" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
+            <button id="OpenSettings" getLabel="OnGetRibbonLabel" onAction="OnRibbonButtonClick" getEnabled="IsRibbonCommandEnabled" getImage="GetRibbonImage" />
           </dialogBoxLauncher>
 
         </group>

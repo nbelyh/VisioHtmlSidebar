@@ -35,24 +35,26 @@
             // 
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webBrowser.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(443, 629);
+            this.webBrowser.Size = new System.Drawing.Size(664, 968);
             this.webBrowser.TabIndex = 0;
             // 
             // TheForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 629);
+            this.ClientSize = new System.Drawing.Size(664, 968);
             this.ControlBox = false;
             this.Controls.Add(this.webBrowser);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TheForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Html Sidebar";
+            this.Text = "Notes";
             this.ResumeLayout(false);
 
         }
