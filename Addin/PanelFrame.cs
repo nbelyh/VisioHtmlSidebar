@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Visio;
+using VisioHtmlSidebar.Properties;
 
 namespace VisioHtmlSidebar
 {
@@ -91,6 +92,9 @@ namespace VisioHtmlSidebar
                 {
                     var childWindowHandle = _form.Handle;
 
+                    _visioWindow.GetWindowRect(out int pnLeft, out int pnTop, out int pnWidth, out var pnHeight);
+                    Settings.Default.SidebarWidth = pnWidth;
+
                     _form.Hide();
 
                     SetWindowLong(childWindowHandle, GWL_STYLE, WS_OVERLAPPED);
@@ -131,13 +135,17 @@ namespace VisioHtmlSidebar
                 {
                     IntPtr childWindowHandle = _form.Handle;
 
+                    var pnWidth = Settings.Default.SidebarWidth;
+                    if (pnWidth < 10 || pnWidth > 4000)
+                        pnWidth = 450;
+
                     _visioWindow = visioParentWindow.Windows.Add(
                         _form.Text,
                         (int)VisWindowStates.visWSDockedRight | (int)VisWindowStates.visWSAnchorMerged,
                         VisWinTypes.visAnchorBarAddon,
                         0,
                         0,
-                        450,
+                        pnWidth,
                         450,
                         AddonWindowMergeId,
                         string.Empty,

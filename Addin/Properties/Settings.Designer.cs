@@ -70,5 +70,17 @@ namespace VisioHtmlSidebar.Properties {
                 this["EnableWebView2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("450")]
+        public int SidebarWidth {
+            get {
+                return ((int)(this["SidebarWidth"]));
+            }
+            set {
+                this["SidebarWidth"] = value;
+            }
+        }
     }
 }

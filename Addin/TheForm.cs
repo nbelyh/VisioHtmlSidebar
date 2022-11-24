@@ -160,7 +160,7 @@ namespace VisioHtmlSidebar
 
             Controls.Add(browserControl);
 
-            browserApi.Navigate(browserControl, GetResourcePath(@"edit.html"), () => { }, (target, cookies) => { });
+            browserApi.Navigate(browserControl, GetResourcePath(@"edit.html"), () => ReloadEditor(), (target, cookies) => { });
         }
     }
 }
