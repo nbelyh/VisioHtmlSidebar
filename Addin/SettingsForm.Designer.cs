@@ -30,7 +30,6 @@
         {
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.textBoxPropertyName = new System.Windows.Forms.TextBox();
             this.labelPropertyName = new System.Windows.Forms.Label();
             this.labelPropertyNamePlainText = new System.Windows.Forms.Label();
             this.textBoxPropertyNamePlainText = new System.Windows.Forms.TextBox();
@@ -38,6 +37,7 @@
             this.checkBoxEnableWebView2 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.textBoxPropertyName = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -64,16 +64,6 @@
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            // 
-            // textBoxPropertyName
-            // 
-            this.textBoxPropertyName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPropertyName.Location = new System.Drawing.Point(28, 49);
-            this.textBoxPropertyName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxPropertyName.Name = "textBoxPropertyName";
-            this.textBoxPropertyName.Size = new System.Drawing.Size(641, 26);
-            this.textBoxPropertyName.TabIndex = 2;
             // 
             // labelPropertyName
             // 
@@ -148,6 +138,20 @@
             this.linkLabel1.Text = "Download the WebView2 runtime to enable WebView2";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // textBoxPropertyName
+            // 
+            this.textBoxPropertyName.FormattingEnabled = true;
+            this.textBoxPropertyName.Items.AddRange(new object[] {
+            "Comment",
+            "User.VisPublish_SidebarMarkdown",
+            "User.VisPublish_TooltipMarkdown",
+            "User.VisPublish_PopoverMarkdown",
+            "User.VisPublish_ContentMarkdown"});
+            this.textBoxPropertyName.Location = new System.Drawing.Point(28, 54);
+            this.textBoxPropertyName.Name = "textBoxPropertyName";
+            this.textBoxPropertyName.Size = new System.Drawing.Size(511, 28);
+            this.textBoxPropertyName.TabIndex = 10;
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.buttonOK;
@@ -155,6 +159,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(687, 537);
+            this.Controls.Add(this.textBoxPropertyName);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.checkBoxEnableWebView2);
@@ -162,7 +167,6 @@
             this.Controls.Add(this.labelPropertyNamePlainText);
             this.Controls.Add(this.textBoxPropertyNamePlainText);
             this.Controls.Add(this.labelPropertyName);
-            this.Controls.Add(this.textBoxPropertyName);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -179,7 +183,6 @@
 
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.TextBox textBoxPropertyName;
         private System.Windows.Forms.Label labelPropertyName;
         private System.Windows.Forms.Label labelPropertyNamePlainText;
         private System.Windows.Forms.TextBox textBoxPropertyNamePlainText;
@@ -187,5 +190,6 @@
         private System.Windows.Forms.CheckBox checkBoxEnableWebView2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.ComboBox textBoxPropertyName;
     }
 }

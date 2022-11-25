@@ -12,7 +12,7 @@ namespace VisioHtmlSidebar
 {
     public partial class TheForm : Form
     {
-        private const short VIS_SECTION_PROP = (short)Visio.VisSectionIndices.visSectionProp;
+        private const short visSectionUser = (short)Visio.VisSectionIndices.visSectionUser;
 
         private Visio.Shape _editorShape;
         private string _currentShapeHtml;
@@ -111,27 +111,31 @@ namespace VisioHtmlSidebar
             await browserApi.ExecuteScript(browserControl, "setEditorHtml", _currentShapeHtml);
         }
 
-        private Visio.Cell GetTargetCell(Visio.Shape shape, string propName)
+        private Visio.Cell GetTargetCell(Visio.Shape shape, string cellName)
         {
             if (shape == null)
                 return null;
 
-            if (string.IsNullOrEmpty(propName))
+            if (string.IsNullOrEmpty(cellName))
                 return null;
 
-            if (shape.CellExistsU[propName, 0] != 0)
-                return shape.CellsU[propName];
+            if (shape.CellExistsU[cellName, 0] != 0)
+                return shape.CellsU[cellName];
 
-            if (shape.SectionExists[VIS_SECTION_PROP, 0] == 0)
+            if (!cellName.StartsWith("User."))
                 return null;
 
-            for (short rowIndex = 0; rowIndex < shape.RowCount[VIS_SECTION_PROP]; ++rowIndex)
-            {
-                if (propName == shape.CellsSRC[VIS_SECTION_PROP, rowIndex, (short) Visio.VisCellIndices.visCustPropsLabel].ResultStr[-1])
-                    return shape.CellsSRC[VIS_SECTION_PROP, rowIndex, (short) Visio.VisCellIndices.visCustPropsValue];
-            }
+            if (shape.SectionExists[visSectionUser, 0] == 0)
+                shape.AddSection(visSectionUser);
 
-            return null;
+            var cellLocalName = cellName.Split('.')[1];
+            short row = shape.AddNamedRow(visSectionUser, cellLocalName, 0);
+
+            var result = shape.CellsSRC[visSectionUser, row, (short)Visio.VisCellIndices.visUserValue];
+
+            result.FormulaU = "No Formula";
+
+            return result;
         }
 
         private void SetCellText(Visio.Cell cell, string text)
